@@ -5,15 +5,20 @@ import com.google.gson.JsonObject;
 public class MainLoop {
 
     public void run() {
+        JsonObject ctx = new JsonObject();
         Future<JsonObject> sample = sample();
         sample.compose(responce -> {
+            ctx.add("test", responce);
             System.out.println("Compose 1: " + responce);
             return sample2();
         }).compose(responce -> {
+            ctx.add("test2", responce);
             System.out.println("Compose 2: " + responce);
             return sample3();
         }).onSuccess(responce -> {
-            System.out.println("Success: " + responce);
+            ctx.add("test3", responce);
+            System.out.println("Compose 3: " + responce);
+            System.out.println("Success: " + ctx);
         }).onFailure(th -> {
             System.out.println("Failure: " + th);
         }).start();
