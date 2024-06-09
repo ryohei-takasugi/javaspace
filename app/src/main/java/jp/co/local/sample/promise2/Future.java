@@ -5,20 +5,43 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+/**
+ * 非同期処理の結果を管理するためのクラス。
+ *
+ * @param <T> 非同期処理の成功結果の型
+ */
 public class Future<T> {
 
     private Consumer<T> successHandler;
     private Consumer<Throwable> failureHandler;
-    private List<Function<T, Future<T>>> composeHandlers = new ArrayList<>();
+    private final List<Function<T, Future<T>>> composeHandlers = new ArrayList<>();
     private final T result;
     private final Throwable th;
 
+    /**
+     * Futureクラスのコンストラクタ。
+     *
+     * @param result 非同期処理の成功結果
+     * @param th     非同期処理の失敗原因となる例外
+     */
     public Future(T result, Throwable th) {
         this.result = result;
         this.th = th;
     }
 
+    /**
+     * 非同期処理を開始します。成功または失敗のハンドラを呼び出します。
+     *
+     * @throws IllegalStateException successHandlerまたはfailureHandlerが設定されていない場合
+     */
     public void start() {
+        if (successHandler == null) {
+            throw new IllegalStateException("Success handler is not set.");
+        }
+        if (failureHandler == null) {
+            throw new IllegalStateException("Failure handler is not set.");
+        }
+
         if (th != null) {
             handleFailure(th);
         } else if (!composeHandlers.isEmpty()) {
@@ -28,22 +51,78 @@ public class Future<T> {
         }
     }
 
+    /**
+     * 非同期処理が成功したときのハンドラを設定します。
+     *
+     * @param handler 成功時のハンドラ
+     * @return このFutureインスタンス
+     * @throws IllegalArgumentException handlerがnullの場合
+     */
+    public Future<T> onSuccess(Consumer<T> handler) {
+        if (handler == null) {
+            throw new IllegalArgumentException("Success handler must not be null.");
+        }
+        this.successHandler = handler;
+        return this;
+    }
+
+    /**
+     * 非同期処理が失敗したときのハンドラを設定します。
+     *
+     * @param handler 失敗時のハンドラ
+     * @return このFutureインスタンス
+     * @throws IllegalArgumentException handlerがnullの場合
+     */
+    public Future<T> onFailure(Consumer<Throwable> handler) {
+        if (handler == null) {
+            throw new IllegalArgumentException("Failure handler must not be null.");
+        }
+        this.failureHandler = handler;
+        return this;
+    }
+
+    /**
+     * 非同期処理の結果に基づいて新しいFutureを生成するハンドラを追加します。
+     *
+     * @param handler 新しいFutureを生成するハンドラ
+     * @return このFutureインスタンス
+     */
+    public Future<T> compose(Function<T, Future<T>> handler) {
+        this.composeHandlers.add(handler);
+        return this;
+    }
+
+    /**
+     * 成功ハンドラを呼び出します。
+     *
+     * @param result 非同期処理の成功結果
+     */
     private void handleSuccess(T result) {
-        if (successHandler != null) {
+        try {
             successHandler.accept(result);
-        } else {
-            System.out.println("Success handler is not set.");
+        } catch (Throwable th) {
+            System.err.println("Error in success handler: " + th.getMessage());
+            th.printStackTrace();
         }
     }
 
+    /**
+     * 失敗ハンドラを呼び出します。
+     *
+     * @param th 非同期処理の失敗原因となる例外
+     */
     private void handleFailure(Throwable th) {
-        if (failureHandler != null) {
+        try {
             failureHandler.accept(th);
-        } else {
-            System.out.println("Failure handler is not set.");
+        } catch (Throwable handlerException) {
+            System.err.println("Error in failure handler: " + handlerException.getMessage());
+            handlerException.printStackTrace();
         }
     }
 
+    /**
+     * composeハンドラを順次処理します。
+     */
     private void handleCompose() {
         Future<T> current = this;
         for (Function<T, Future<T>> handler : composeHandlers) {
@@ -59,20 +138,5 @@ public class Future<T> {
             }
         }
         handleSuccess(current.result);
-    }
-
-    public Future<T> onSuccess(Consumer<T> handler) {
-        this.successHandler = handler;
-        return this;
-    }
-
-    public Future<T> onFailure(Consumer<Throwable> handler) {
-        this.failureHandler = handler;
-        return this;
-    }
-
-    public Future<T> compose(Function<T, Future<T>> handler) {
-        this.composeHandlers.add(handler);
-        return this;
     }
 }
