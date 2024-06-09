@@ -9,25 +9,50 @@ import java.util.function.Consumer;
 
 import com.google.gson.JsonObject;
 
+/**
+ * 複数の非同期タスクをシリアルに実行するクラス。
+ */
 public class SerialTaskExecutor {
 
     private final List<Task<JsonObject>> tasks = new ArrayList<>();
     private final ExecutorService executor;
     private final Task<JsonObject> firstTask;
 
+    /**
+     * SerialTaskExecutorのインスタンスを生成します。
+     *
+     * @param firstTask 最初に実行するタスク
+     * @return 新しいSerialTaskExecutorインスタンス
+     */
     public static SerialTaskExecutor create(Task<JsonObject> firstTask) {
         return new SerialTaskExecutor(firstTask, Executors.newSingleThreadExecutor());
     }
 
+    /**
+     * SerialTaskExecutorのコンストラクタ。
+     *
+     * @param firstTask 最初に実行するタスク
+     * @param executor  タスクを実行するためのExecutorService
+     */
     public SerialTaskExecutor(Task<JsonObject> firstTask, ExecutorService executor) {
         this.firstTask = firstTask;
         this.executor = executor;
     }
 
+    /**
+     * 実行するタスクを追加します。
+     *
+     * @param task 追加するタスク
+     */
     public void addTask(Task<JsonObject> task) {
         tasks.add(task);
     }
 
+    /**
+     * タスクをシリアルに実行し、すべてのタスクが完了した後にコールバックを呼び出します。
+     *
+     * @param callback 最終結果を処理するコールバック
+     */
     public void executeTasks(Consumer<AsyncResult<JsonObject>> callback) {
         if (tasks.isEmpty()) {
             throw new IllegalStateException("No tasks to execute");
@@ -49,6 +74,9 @@ public class SerialTaskExecutor {
         future.join();
     }
 
+    /**
+     * ExecutorServiceをシャットダウンします。
+     */
     private void shutdownExecutor() {
         try {
             executor.shutdown();
@@ -62,6 +90,9 @@ public class SerialTaskExecutor {
         System.out.println("ExecutorService shut down");
     }
 
+    /**
+     * 現在アクティブなスレッドの情報を出力します。
+     */
     private void printActiveThreads() {
         Thread[] threads = new Thread[Thread.activeCount()];
         Thread.enumerate(threads);
