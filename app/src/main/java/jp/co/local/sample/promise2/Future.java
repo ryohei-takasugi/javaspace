@@ -34,7 +34,7 @@ public class Future<T> {
      *
      * @throws IllegalStateException successHandlerまたはfailureHandlerが設定されていない場合
      */
-    public void start() {
+    private void start() {
         if (successHandler == null) {
             throw new IllegalStateException("Success handler is not set.");
         }
@@ -63,6 +63,8 @@ public class Future<T> {
             throw new IllegalArgumentException("Success handler must not be null.");
         }
         this.successHandler = handler;
+        if (this.successHandler != null && this.failureHandler != null && (this.result != null || this.th != null))
+            start();
         return this;
     }
 
@@ -78,6 +80,8 @@ public class Future<T> {
             throw new IllegalArgumentException("Failure handler must not be null.");
         }
         this.failureHandler = handler;
+        if (this.successHandler != null && this.failureHandler != null && (this.result != null || this.th != null))
+            start();
         return this;
     }
 

@@ -21,7 +21,7 @@ public class MainLoop {
             System.out.println("Success: " + ctx);
         }).onFailure(th -> {
             System.out.println("Failure: " + th);
-        }).start();
+        });
     }
 
     private Future<JsonObject> sample() {
