@@ -63,7 +63,7 @@ public class Future<T> {
             throw new IllegalArgumentException("Success handler must not be null.");
         }
         this.successHandler = handler;
-        if (this.successHandler != null && this.failureHandler != null && (this.result != null || this.th != null))
+        if (checkStartEnable())
             start();
         return this;
     }
@@ -80,7 +80,7 @@ public class Future<T> {
             throw new IllegalArgumentException("Failure handler must not be null.");
         }
         this.failureHandler = handler;
-        if (this.successHandler != null && this.failureHandler != null && (this.result != null || this.th != null))
+        if (checkStartEnable())
             start();
         return this;
     }
@@ -94,6 +94,18 @@ public class Future<T> {
     public Future<T> compose(Function<T, Future<T>> handler) {
         this.composeHandlers.add(handler);
         return this;
+    }
+
+    /**
+     * 非同期処理を開始できるかどうかを確認します。
+     *
+     * @return 開始可能な場合はtrue、それ以外の場合はfalse
+     */
+    private boolean checkStartEnable() {
+        if (this.successHandler != null && this.failureHandler != null
+                && (this.result != null || this.th != null))
+            return true;
+        return false;
     }
 
     /**
