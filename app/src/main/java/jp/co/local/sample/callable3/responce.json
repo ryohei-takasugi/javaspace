@@ -1,0 +1,12 @@
+{
+    "statusCode": 200,
+    "body": "{\"latitude\":43.05,\"longitude\":141.375,\"generationtime_ms\":0.027060508728027344,\"utc_offset_seconds\":0,\"timezone\":\"GMT\",\"timezone_abbreviation\":\"GMT\",\"elevation\":21.0,\"current_units\":{\"time\":\"iso8601\",\"interval\":\"seconds\",\"weather_code\":\"wmo code\"},\"current\":{\"time\":\"2024-06-07T11:00\",\"interval\":900,\"weather_code\":0}}",
+    "context": {
+        "statusCode": 200,
+        "body": "{\"latitude\":34.7,\"longitude\":135.5,\"generationtime_ms\":0.033020973205566406,\"utc_offset_seconds\":0,\"timezone\":\"GMT\",\"timezone_abbreviation\":\"GMT\",\"elevation\":3.0,\"current_units\":{\"time\":\"iso8601\",\"interval\":\"seconds\",\"weather_code\":\"wmo code\"},\"current\":{\"time\":\"2024-06-07T11:00\",\"interval\":900,\"weather_code\":1}}",
+        "context": {
+            "statusCode": 200,
+            "body": "{\"latitude\":35.7,\"longitude\":139.6875,\"generationtime_ms\":0.028967857360839844,\"utc_offset_seconds\":0,\"timezone\":\"GMT\",\"timezone_abbreviation\":\"GMT\",\"elevation\":40.0,\"current_units\":{\"time\":\"iso8601\",\"interval\":\"seconds\",\"weather_code\":\"wmo code\"},\"current\":{\"time\":\"2024-06-07T11:00\",\"interval\":900,\"weather_code\":0}}"
+        }
+    }
+}

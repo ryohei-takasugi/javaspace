@@ -1,0 +1,40 @@
+{
+    "task2": {
+        "latitude": 35.7,
+        "longitude": 139.6875,
+        "generationtime_ms": 0.03910064697265625,
+        "utc_offset_seconds": 0,
+        "timezone": "GMT",
+        "timezone_abbreviation": "GMT",
+        "elevation": 40,
+        "current_units": {
+            "time": "iso8601",
+            "interval": "seconds",
+            "weather_code": "wmo code"
+        },
+        "current": {
+            "time": "2024-06-05T12:45",
+            "interval": 900,
+            "weather_code": 1
+        }
+    },
+    "task0": {
+        "latitude": 43.05,
+        "longitude": 141.375,
+        "generationtime_ms": 0.02110004425048828,
+        "utc_offset_seconds": 0,
+        "timezone": "GMT",
+        "timezone_abbreviation": "GMT",
+        "elevation": 21,
+        "current_units": {
+            "time": "iso8601",
+            "interval": "seconds",
+            "weather_code": "wmo code"
+        },
+        "current": {
+            "time": "2024-06-05T12:45",
+            "interval": 900,
+            "weather_code": 1
+        }
+    }
+}
