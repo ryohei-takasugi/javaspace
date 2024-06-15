@@ -3,11 +3,11 @@
  */
 package jp.co.local.sample;
 
-import jp.co.local.sample.promise2.MainLoop;
+import jp.co.local.sample.httpserver.Server;
 
 public class Main {
     public static void main(String[] args) throws Throwable {
-        MainLoop main = new MainLoop();
+        Server main = new Server();
         main.run();
 
     }
