@@ -3,12 +3,12 @@
  */
 package jp.co.local.sample;
 
-import jp.co.local.sample.httpserver.Server;
+import jp.co.local.sample.loop.MainLoop;
 
 public class Main {
     public static void main(String[] args) throws Throwable {
-        Server main = new Server();
-        main.run();
+        MainLoop main = new MainLoop();
+        main.run(args);
 
     }
 }
