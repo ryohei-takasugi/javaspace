@@ -3,12 +3,12 @@
  */
 package jp.co.local.sample;
 
-import jp.co.local.sample.loop.MainLoop;
+import jp.co.local.sample.basic.MainLoop;
 
 public class Main {
     public static void main(String[] args) throws Throwable {
         MainLoop main = new MainLoop();
-        main.run(args);
+        main.run();
 
     }
 }
